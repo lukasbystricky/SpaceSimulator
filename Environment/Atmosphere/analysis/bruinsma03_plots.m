@@ -1,7 +1,6 @@
 addpath ..
 addpath ../coefficients
-addpath ../../Utilities/Math
-addpath ../../Utilities/Plots
+addpath ../../../Utilities/Math
 
 close all
 
