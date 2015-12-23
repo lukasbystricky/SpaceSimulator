@@ -1,7 +1,6 @@
 addpath ..
 addpath ../coefficients
-addpath ../../Utilities/Math
-addpath ../../Utilities/Plots
+addpath ../../../Utilities/Math
 
 close all
 
@@ -731,6 +730,3 @@ if max(FIGS_TO_PLOT == 9)
     xlabel('latitude');
     ylabel('particles per cm^3');
 end
-
-
-
