@@ -1,4 +1,4 @@
-function [u, g] = gravitational_acceleration_harmonics(r, az, el, coeffs)
+function [u, g] = geopotential(r, az, el, coeffs)
 
 MU = 3.986004415e14;
 A = 6.3781363e6;
