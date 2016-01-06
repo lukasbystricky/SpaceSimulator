@@ -1,24 +1,58 @@
 function [t_inf, T, c_He, c_O, c_N2] = dtm77(z, coeffs, P, f, f_mean, k, t, d)
 
-T120 = 380;
-R = 6.35677e3;
-S = 0.02;
+%% dtm77 Drag Temperature Model for high altitude atmospheric density 
+% [t_inf, T, c_He, c_O, c_N2] = dtm77(z, coeffs, P, f, f_mean, k, t, d)
+% implements the DTM 77 model for high altiude density as desribed by
+% Barlier et al. in "A thermospheric model based on satellite drag data".
+%
+% Given: 
+% - an altiude, z
+% - a set of coefficients, coeffs
+% - a vector of Legendre polynomials evaluated at sin(latitude), P
+% - the daily solar flux, f
+% - the average solar flux, f_mean
+% - the current geomagnetic index, k
+% - the local solar time, t
+% - the day number, d
+% this model returns:
+% - the thermopause temperature, t_inf
+% - the temperature, T
+% - the concentration of Helium, c_He
+% - the concentration of Oxygen, c_O
+% - the concentration of molecular Nitrogen, c_N2
+%
+% The altitude z must be a scalar given in km.
+%
+% The coefficients must be given in a 36x4 matrix in the order of
+% temperature, He, O, N2.
+%
+% P must be a matrix of size 6x6, such that P(i,j) = the associated
+% legendre polynomial of degree i-1 and order j-1 evaluated at
+% sin(latitude).
+%
+% f and f_mean must be measured in 10^-22 W m^-2 Hz^-1.
+%
+% k must be an integer between 0 and 9.
+%
+% t must be measured in hours, between 0 and 24.
+%
+% d is the day number in the year, between 0 and 365.
+%
+% The temperatures returned are given in degrees Kelvin, while the
+% concentrations are given in particles/cm^3.
 
-MU = 398600.4418;
+T120 = 380;              % Temperature at 120 km                [K]
+R = 6.35677e3;           % Equitorial radius of Earth           [km]
+S = 0.02;                % Temperature gradient parameter
+
+MU = 398600.4418;        % Gravitational parameter of Earth     [km^3 s^-2]
+BOLTZ = 1.38064852;      % Boltzmann constant                   [10^29 km^2 kg s^-2 K-1]
+
+MASS_HE = 6.6464764e2;   % Mass of Helium                       [10^29 kg]
+MASS_O = 2.6567626e3;    % Mass of Oxygen                       [10^29 kg]
+MASS_N2 = 2*2.3258671e3; % Mass of di-Nitrogen                  [10^29 kg]
+
 g = MU/((R+120)^2);
-
-% BOLTZ = 1.38064852e-23;
-% 
-% MASS_HE = 6.6464764e-27;
-% MASS_O2 = 2*2.6567626e-26;
-% MASS_N2 = 2*2.3258671e-26;
-
-BOLTZ = 1.38064852;
-
-MASS_HE = 6.6464764e2;
-MASS_O = 2.6567626e3;
-MASS_N2 = 2*2.3258671e3;
-
 sigma = S + 1/(R + 120);
 
 xi = (z - 120)*(R + 120)/(z + R);
