@@ -5,7 +5,7 @@ addpath ../../../Utilities/Plots
 
 close all
 
-coeffs77 = dlmread('coeffs77_update.csv');
+coeffs77 = dlmread('coeffs77.csv');
 
 MASS_HE = 6.6464764e-24;
 MASS_O = 2.6567626e-23;
