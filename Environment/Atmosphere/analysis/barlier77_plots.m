@@ -1,4 +1,9 @@
+
+
 addpath ..
+%% Recreates plots in paper "A thermospheric model based on satellite drag" 
+% by Barlier et al.
+
 addpath ../coefficients
 addpath ../../../Utilities/Math
 addpath ../../../Utilities/Plots
@@ -10,7 +15,7 @@ coeffs77 = dlmread('coeffs77.csv');
 MASS_HE = 6.6464764e-24;
 MASS_O = 2.6567626e-23;
 MASS_N2 = 2*2.3258671e-23;
-FIGS_TO_PLOT = [5];
+FIGS_TO_PLOT = [10];
 
 %% figure 3
 % Sensitivity of density, temperature and concentrations to f = f_mean
@@ -422,7 +427,7 @@ if max(FIGS_TO_PLOT == 6)
     xlabel('Day');
     set(gca,'YTickLabel','')
     colorbar
-    annotation('textbox', [0 0.665 1 0.1], 'String', 'N_2 concentration',...
+    annotation('textbox', [0 0.662 1 0.1], 'String', 'N_2 concentration',...
                 'EdgeColor', 'none', 'HorizontalAlignment', 'center', 'Fontsize', 15);
     
     axes(h(6));
@@ -482,8 +487,7 @@ if max(FIGS_TO_PLOT == 6)
     contourf(t, lat*180/pi, c_He);
     xlabel('Time');
     ylabel('Latitude');
-    colorbar('westoutside');
-    
+    colorbar('westoutside');    
 end
 
 %% figure 7
@@ -765,14 +769,14 @@ if (max(FIGS_TO_PLOT == 9) || max(FIGS_TO_PLOT == 10) ||...
     c_N2_m45 = zeros(1,N);
     
     for i = 1:N
-              for j = 1:N
+        for j = 1:N
             [T_tmp, ~, c_He_tmp, c_O_tmp, c_N2_tmp] = dtm77(...
-                    z, coeffs77, P, f, f, k, t(j), d(i));
-                
+                z, coeffs77, P, f, f, k, t(j), d(i));
+            
             T_inf_m45(i) = T_inf_m45(i) + T_tmp/N;
             c_He_m45(i) = c_He_m45(i) + c_He_tmp/N;
             c_O_m45(i) = c_O_m45(i) + c_O_tmp/N;
-            c_N2_m45(i) = c_N2_m45(i) + c_N2_tmp/N;   
+            c_N2_m45(i) = c_N2_m45(i) + c_N2_tmp/N;
         end
     end
     
@@ -818,8 +822,8 @@ if (max(FIGS_TO_PLOT == 9) || max(FIGS_TO_PLOT == 10) ||...
     
     figure();
     hold on
-    plot(d, T_inf_p45);
-    plot(d, T_inf_m45, 'r');
+    plot(d, T_inf_p45, 'linewidth', 2);
+    plot(d, T_inf_m45, 'r', 'linewidth', 2);
     
     legend('45^o latitude', '-45^o latitude');
     xlabel('day');
