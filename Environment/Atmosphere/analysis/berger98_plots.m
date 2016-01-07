@@ -1,3 +1,7 @@
+%% Recreates plots in paper "Improvement of the empirical thermospheric 
+% model DTM: DTM94 - a comparative review of various temporal variations
+% and prospects in space geodesy applications" by Berger et al. 
+
 addpath ..
 addpath ../coefficients
 addpath ../../../Utilities/Math
@@ -14,9 +18,10 @@ MASS_HE = 6.6464764e-24;
 MASS_O = 2.6567626e-23;
 MASS_N2 = 2*2.3258671e-23;
 
-FIGS_TO_PLOT = [3];
+FIGS_TO_PLOT = [9];
 
 %% figure 2
+% Geomagnetic sensitity for density at various altitudes
 if max(FIGS_TO_PLOT == 2)
     
     d = 80;
@@ -120,6 +125,7 @@ if max(FIGS_TO_PLOT == 2)
 end
 
 %% figure 3
+% Sensitivity of concentrations to geomagnetic index
 if max(FIGS_TO_PLOT == 3)
     d = 80;
     f = 150;
@@ -182,36 +188,38 @@ if max(FIGS_TO_PLOT == 3)
     plot(k, c_O_94, 'r');
     legend('DTM 77', 'DTM 94','Location','northwest');
     title('O concentration (500 km)');
-    xlabel('geomagnetic index');
-    ylabel('particles per cm^3');
+    xlabel('Geomagnetic index');
+    ylabel('Particles per cm^3');
     
     subplot(2,2,2);
     plot(k, c_N2_77);
     hold on
     plot(k, c_N2_94, 'r');
     title('N_2 concentration (300 km)');
-    xlabel('geomagnetic index');
-    ylabel('particles per cm^3');
+    xlabel('Geomagnetic index');
+    ylabel('Particles per cm^3');
     
     subplot(2,2,3);
     plot(k, c_He_77)
     hold on
     plot(k, c_He_94, 'r');
-    title('He concentration (1400 km)');
-    xlabel('geomagnetic index');
-    ylabel('particles per cm^3');
+    title('He concentration (1400 km, equator)');
+    xlabel('Geomagnetic index');
+    ylabel('Particles per cm^3');
     
     subplot(2,2,4);
     plot(k, c_He_77_80)
     hold on
     plot(k, c_He_94_80, 'r');
     title('He concentration (1400 km, 80^o latitude)');
-    xlabel('geomagnetic index');
-    ylabel('particles per cm^3');
+    xlabel('Geomagnetic index');
+    ylabel('Particles per cm^3');
     
 end
 
 %% figure 4
+% Sensitivity of the thermopause temperature to geomagnetic index and
+% solar flux
 if max(FIGS_TO_PLOT == 4)
 
     d = 80;
@@ -243,8 +251,8 @@ if max(FIGS_TO_PLOT == 4)
     plot(k, T_inf_94_geo, 'r');
     
     legend('DTM 77', 'DTM 94','Location','northwest');
-    xlabel('geomagnetic index');
-    ylabel('degrees Kelvin');
+    xlabel('Geomagnetic index');
+
     
     k = 3;
     f = linspace(50, 250, N);
@@ -261,12 +269,15 @@ if max(FIGS_TO_PLOT == 4)
     hold on
     plot(f, T_inf_94_flux, 'r');
     
-    xlabel('mean solar flux');
-    ylabel('degrees Kelvin');    
+    xlabel('Mean solar flux $f = \bar{f}$', 'interpreter' ,'latex');   
+    
+    annotation('textbox', [0 0.9 1 0.1], 'String', 'Thermopause temperature (^oK)',...
+                'EdgeColor', 'none', 'HorizontalAlignment', 'center', 'Fontsize', 15);
     
 end
 
 %% figure 5
+% Density sensitivity to f = f_mean
 if max(FIGS_TO_PLOT == 5)
     
     d = 80;
@@ -365,11 +376,11 @@ if max(FIGS_TO_PLOT == 5)
     plot(f, rho_500_94, 'r');
     xlabel('Mean solar flux');
     ylabel('g/cm^3');
-    title('500 km');   
-    
+    title('500 km');    
 end
 
 %% figure 6
+% Density and thermopause temperature sensitivity to f - f_mean
 if max(FIGS_TO_PLOT == 6)
     
     d = 80;
@@ -415,7 +426,7 @@ if max(FIGS_TO_PLOT == 6)
     hold on
     plot(f_day - f_mean, T_inf_94, 'r');
     xlabel('$f - \bar{f}$', 'Interpreter', 'LaTex');
-    ylabel('degree Kelvin');
+    ylabel('^o K');
     title('Thermopause temperature, $\bar{f} = 100$', 'Interpreter', 'LaTex');
     
     f_mean = 200;
@@ -450,12 +461,13 @@ if max(FIGS_TO_PLOT == 6)
     hold on
     plot(f_day - f_mean, T_inf_94, 'r');
     xlabel('$f - \bar{f}$', 'interpreter', 'latex');
-    ylabel('degree Kelvin');
+    ylabel('^o K');
     title('Thermopause temperature, $\bar{f} = 200$',  'Interpreter', 'LaTex');
     
 end
 
 %% figure 7
+% Solar time sensitivity for concentrations and thermopause temperature
 if max(FIGS_TO_PLOT == 7)
 
     d = 80;
@@ -517,6 +529,7 @@ if max(FIGS_TO_PLOT == 7)
     hold on
     plot(t, c_He_94, 'r');
     xlim([0,24]);
+    ylim([0, 3e5]);
     title('He concentration (1400 km)');
     xlabel('solar time');
     ylabel('particles per cm^3');
@@ -542,6 +555,7 @@ if max(FIGS_TO_PLOT == 7)
 end
 
 %% figure 8
+% Day of year sensitiviy for concentrations and theropause temperature
 if max(FIGS_TO_PLOT == 8)
 
     t = 9;
@@ -628,7 +642,7 @@ if max(FIGS_TO_PLOT == 8)
 end
 
 %% figure 9
-
+% Latitude sensitivity for concentrations and thermopause temperature
 if max(FIGS_TO_PLOT == 9)
 
     d = 80;
@@ -699,6 +713,7 @@ if max(FIGS_TO_PLOT == 9)
     plot(lat*180/pi, c_O_94/N, 'r');
     legend('DTM 77', 'DTM 94','Location','northwest');
     xlim([-90,90]);
+    ylim([0, 7e7]);
     title('O concentration (500 km)');
     xlabel('latitude');
     ylabel('particles per cm^3');
@@ -708,6 +723,7 @@ if max(FIGS_TO_PLOT == 9)
     hold on
     plot(lat*180/pi, c_He_94/N, 'r');
     xlim([-90,90]);
+    ylim([0, 3e5]);
     title('He concentration (1400 km)');
     xlabel('latitude');
     ylabel('particles per cm^3');
@@ -717,6 +733,7 @@ if max(FIGS_TO_PLOT == 9)
     hold on
     plot(lat*180/pi, T_inf_94/N, 'r');
     xlim([-90,90]);
+    ylim([900, 1350]);
     title('Thermopause temperature');
     xlabel('latitude');
     ylabel('degree Kelvin');
@@ -726,6 +743,7 @@ if max(FIGS_TO_PLOT == 9)
     hold on
     plot(lat*180/pi, c_N2_94/N, 'r');
     xlim([-90,90]);
+    ylim([0, 3e8]);
     title('N_2 concentration (300 km)');
     xlabel('latitude');
     ylabel('particles per cm^3');
