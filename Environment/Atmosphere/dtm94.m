@@ -1,18 +1,63 @@
-function [t_inf, T, cH, cHe, cO, cN2] = dtm94(z, coeffs, P, f, f_mean, k, t, d)
+function [t_inf, T, c_H, c_He, c_O, c_N2] = dtm94(z, coeffs, P, f, f_mean, k, t, d)
 
-T120 = 380;
-T120p = 14.348;
-R = 6.35677e3;
+%% dtm94 Drag Temperature Model for high altitude atmospheric density 
+% [t_inf, T, cH, c_He, c_O, c_N2] = dtm94(z, coeffs, P, f, f_mean, k, t, d)
+% implements the DTM 94 model for high altiude density as desribed by
+% Berger et al. in "Improvement of the empirical thermospheric model DTM:
+% DTM94 - a comparative review of various temporal variations
+% and prospects in space geodesy applications".
+%
+% Given: 
+% - an altiude, z
+% - a set of coefficients, coeffs
+% - a vector of Legendre polynomials evaluated at sin(latitude), P
+% - the daily solar flux, f
+% - the average solar flux, f_mean
+% - the current geomagnetic index, k
+% - the local solar time, t
+% - the day number, d
+% this model returns:
+% - the thermopause temperature, t_inf
+% - the temperature, T
+% - the concentration of Hydrogen, c_H
+% - the concentration of Helium, c_He
+% - the concentration of Oxygen, c_O
+% - the concentration of molecular Nitrogen, c_N2
+%
+% The altitude z must be a scalar given in km.
+%
+% The coefficients must be given in a 36x4 matrix in the order of
+% temperature, He, O, N2.
+%
+% P must be a matrix of size 6x6, such that P(i,j) = the associated
+% legendre polynomial of degree i-1 and order j-1 evaluated at
+% sin(latitude).
+%
+% f and f_mean must be measured in 10^-22 W m^-2 Hz^-1.
+%
+% k must be an integer between 0 and 9.
+%
+% t must be measured in hours, between 0 and 24.
+%
+% d is the day number in the year, between 0 and 365.
+%
+% The temperatures returned are given in degrees Kelvin, while the
+% concentrations are given in particles/cm^3.
 
-MU = 398600.4418;
+
+T120 = 380;              % Temperature at 120 km                  [K]
+R = 6.35677e3;           % Equitorial radius of Earth             [km]
+T120p = 14.348;          % Relative temperature vertical gradient [K/km]
+
+MU = 398600.4418;        % Gravitational parameter of Earth     [km^3 s^-2]
+BOLTZ = 1.38064852;      % Boltzmann constant                   [10^29 km^2 kg s^-2 K-1]
+
+MASS_H = 1.6737236e2;    % Mass of Hydrogen                     [10^29 kg]
+MASS_HE = 6.6464764e2;   % Mass of Helium                       [10^29 kg]
+MASS_O = 2.6567626e3;    % Mass of Oxygen                       [10^29 kg]
+MASS_N2 = 2*2.3258671e3; % Mass of di-Nitrogen                  [10^29 kg]
+
 g = MU/((R+120)^2);
-
-BOLTZ = 1.38064852;
-
-MASS_H = 1.6737236e2;
-MASS_HE = 6.6464764e2;
-MASS_O = 2.6567626e3;
-MASS_N2 = 2*2.3258671e3;
 
 xi = (z - 120)*(R + 120)/(z + R);
 
@@ -28,7 +73,6 @@ gammaN2 = MASS_N2*g/(sigma*BOLTZ*t_inf);
 
 alphaH = -0.38;
 alphaHe = -0.38;
-a = (t_inf - T120)/t_inf;
 
 T = t_inf - (t_inf - T120)*exp(-sigma*xi);
 
@@ -37,15 +81,10 @@ fHe = (T120/T)^(1 + alphaHe + gammaHe)*exp(-sigma*gammaHe*xi);
 fO = (T120/T)^(1 + gammaO)*exp(-sigma*gammaO*xi);
 fN2 = (T120/T)^(1 + gammaN2)*exp(-sigma*gammaN2*xi);
 
-cH = cH_0*fH;
-cHe = cHe_0*fHe;
-cO = cO_0*fO;
-cN2 = cN2_0*fN2;
-
-% cH = cH_0*((1 - a)/(1 - a*exp(-sigma*xi)))^(1 + alphaH + gammaH)*exp(-sigma*xi*gammaH);
-% cHe = cHe_0*((1 - a)/(1 - a*exp(-sigma*xi)))^(1 + alphaHe + gammaHe)*exp(-sigma*xi*gammaHe);
-% cO = cO_0*((1 - a)/(1 - a*exp(-sigma*xi)))^(1 + gammaO)*exp(-sigma*xi*gammaO);
-% cN2 = cN2_0*((1 - a)/(1 - a*exp(-sigma*xi)))^(1 + gammaN2)*exp(-sigma*xi*gammaN2);
+c_H = cH_0*fH;
+c_He = cHe_0*fHe;
+c_O = cO_0*fO;
+c_N2 = cN2_0*fN2;
 
 end
 
