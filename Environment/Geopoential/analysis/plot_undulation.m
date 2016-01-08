@@ -1,4 +1,4 @@
-%% This script does overlays a contour plot of the Earth's undulation on a
+%% This script overlays a contour plot of the Earth's undulation on a
 % map of the Earth
 
 addpath ../
