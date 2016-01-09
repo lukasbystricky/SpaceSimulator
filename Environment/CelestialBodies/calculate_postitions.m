@@ -1,5 +1,33 @@
 function pos = calculate_postitions(ephemeris, t, planet)
 
+%% calculate_positions Calculate the position of a planet
+% pos = calculate_postitions(ephemeris, t, planet) calculates the position 
+% of a planet using a NASA JPL ephemeris
+%
+% Given: 
+% - an ephemeris
+% - a time, t in Julien days
+% - a planet name
+%
+% this model returns:
+% - the position of the planet at time t
+%
+% The planet name must be one of the following strings:
+% - mercury
+% - venus
+% - earth
+% - mars
+% - jupiter
+% - saturn
+% - uranus
+% - neptune
+% - pluto
+% - sun
+% - moon
+% 
+% The ephemeris must be read in and parsed properly using the function
+% read_ephemeris_file
+
 switch planet
     case 'mercury'
         time_subintervals = ephemeris.mercury.time_subintervals;
