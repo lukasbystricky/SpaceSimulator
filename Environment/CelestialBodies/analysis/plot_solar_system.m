@@ -1,11 +1,19 @@
+%% Create a plot of the orbits of all the planets
+
+addpath ..
+addpath ../coefficients
+addpath ../../../Utilities/Math
+
+close all
 
 header = [  3   171   231   309   342   366   387   405   423   441   753   819   899;
     14    10    13    11     8     7     6     6     6    13    11    10    10;
      4     2     2     1     1     1     1     1     1     8     2     4     4];
  
-ephemeris = read_ephemeris_file('ascp1960.405', header);
+ephemeris = read_ephemeris_file('ephemeris1960-2200.txt', header);
 
 t = linspace(ephemeris.time_intervals(1), ephemeris.time_intervals(end), 10000);
+
 figure();
 hold
 
