@@ -1,5 +1,26 @@
 function ephemeris = read_ephemeris_file(fname, header)
 
+%% calculate_positions Reads a planetary ephemeris file
+% ephemeris = read_ephemeris_file(fname, header) reads and parses a JPL
+% planetary ephemeris file
+%
+% Given: 
+% - a file name
+% - a header
+%
+% this model returns:
+% - a ephemeris containing coefficients for each planet/body
+%
+% The ephemeris file provided must follow the format described at 
+% ftp://ssd.jpl.nasa.gov/pub/eph/planets/ascii/ascii_format.txt. 
+% 
+% The header matrix must be be exactly the matrix provided in the JPL
+% header file. 
+%
+% The returned ephemeris is a structure with a field for each planet/body
+% each containing the a list of the time subintervals and the respective
+% coefficients.
+
 M = dlmread(fname);
 A = M';
 
