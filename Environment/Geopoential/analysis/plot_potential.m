@@ -27,11 +27,19 @@ for i = 1:length(az)
         
         [u(i,j), g_vec] = geopotential(r, AZ(i,j), EL(i,j), coeffs);
         
-        g(i,j) = norm(g_vec);        
+        
+        
+        g_spherical = [-MU/r^2; 0; 0];
+        
+        rot = [sin(EL(i,j))*cos(AZ(i,j)), cos(EL(i,j))*cos(AZ(i,j)), -sin(AZ(i,j));
+                sin(EL(i,j))*sin(AZ(i,j)), cos(EL(i,j))*sin(AZ(i,j)), cos(AZ(i,j));
+                cos(EL(i,j)),         -sin(EL(i,j)),        0];
+
+        g_spherical = rot*g_spherical;
+        
+        g(i,j) = norm(g_vec - g_spherical);
     end
 end
-
-g = g - MU/r^2;
 
 %% surface plot on sphere of potential and acceleration
 figure();
