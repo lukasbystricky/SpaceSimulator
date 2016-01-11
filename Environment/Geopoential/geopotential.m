@@ -29,9 +29,9 @@ function [u, g] = geopotential(r, az, el, coeffs)
 MU = 3.986004415e14;      % Gravitational parameter of Earth    [km^3 s^-2]
 A = 6.3781363e6;          % Mean equitorial radius              [m]
 
-u    = -MU/r;
+u    = MU/r;
 g    = zeros(3,1);
-g(1) = MU/r^2;
+g(1) = -MU/r^2;
 
 [nrows, ncols] = size(coeffs);
 
@@ -49,11 +49,11 @@ if (ncols > 1)
         Pnm = P(m+1,n+1);
         Pnmd = Pd(m+1,n+1);
         
-        u = u - A^n*MU*(Pnm*(C*cos(m*az) + S*sin(m*az)))/(r^(n+1));
+        u = u + A^n*MU*(Pnm*(C*cos(m*az) + S*sin(m*az)))/(r^(n+1));
         
-        g(1) = g(1) + A^n*(n+1)*MU*Pnm*(C*cos(m*az) + S*sin(m*az))/(r^(n+2));
-        g(2) = g(2) - A^n*MU*Pnmd*cos(el)*(C*cos(m*az) + S*sin(m*az))/(r^(n+2));
-        g(3) = g(3) - A^n*MU*m*Pnm*(S*cos(m*az) - C*sin(m*az))/(r^(n+2)*sin(el));
+        g(1) = g(1) - A^n*(n+1)*MU*Pnm*(C*cos(m*az) + S*sin(m*az))/(r^(n+2));
+        g(2) = g(2) + A^n*MU*Pnmd*cos(el)*(C*cos(m*az) + S*sin(m*az))/(r^(n+2));
+        g(3) = g(3) + A^n*MU*m*Pnm*(S*cos(m*az) - C*sin(m*az))/(r^(n+2)*sin(el));
     end
 end
 rot = [sin(el)*cos(az), cos(el)*cos(az), -sin(az);
