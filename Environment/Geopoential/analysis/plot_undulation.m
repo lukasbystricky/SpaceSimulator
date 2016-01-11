@@ -43,7 +43,7 @@ img = imread('coast.jpg');
 image([-180,180],[-90, 90], flipud(img));
 
 hold all;
-[~,h] = contourf(az*(180/pi), el*(180/pi), -flipud(n), 30, 'EdgeColor', 'none');
+[~,h] = contourf(az*(180/pi), el*(180/pi), flipud(n), 30, 'EdgeColor', 'none');
 
 shading interp;
 
